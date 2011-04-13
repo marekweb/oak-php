@@ -4,7 +4,6 @@ require '../../../init.php';
 
 $router = new \oak\Router(array(
 	'GET' => array(
-		'archive' => array('marekweb\Controller', 'everything'),
 		'greetings/:name' => array('exampleapp\Controller', 'greetings'),
 		'greetings' => array('exampleapp\Controller', 'greetingsblank'),
 		'' => array('exampleapp\Controller', 'index'),
@@ -19,6 +18,6 @@ $router = new \oak\Router(array(
 
 $invoker = new \oak\Invoker;
 
-$dispatcher = new \oak\Dispatcher($router, $invoker, array('marekweb\Controller', 'pageNotFound'));
+$dispatcher = new \oak\Dispatcher($router, $invoker, array('exampleweb\Controller', 'pageNotFound'));
 
 $dispatcher->dispatchFromEnvironment();

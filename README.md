@@ -3,16 +3,15 @@ Oak php
 
 *Oak* is an *unframework* in PHP. It's aimed at small, lightweight, do-it-yourself apps, completely avoiding the heavy weight of bloated frameworks. It builds up from the strengths of php, instead of over-engineering and using automagical smoke and mirrors.
 
-What it does:
-	- Implenents simple path routing.
-	- 
-	- Standardized class autoloading, for an organized library
+What it implements:
+ - Path routing.
+ - Standardized class autoloading.
 
 	
 Principles:
-	- Ultra-explicit configuration, no magic.
-	- Ultra-thin layer over plain php, no wizardry.
-	- Ultra-loose coupling, no convoluted architecture.
+ - Ultra-explicit configuration, no magic.
+ - Ultra-thin layer over plain php, no wizardry.
+ - Ultra-loose coupling, no convoluted architecture.
 
 	
 Organization
@@ -47,4 +46,4 @@ Download Oak and see the included example app. It has explanations in the commen
 Authors
 -------
 
-Oak-php is (c) 2011 Marek Z. @marekweb
+oak-php is &copy; 2011 @marekweb

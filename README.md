@@ -1,17 +1,17 @@
 Oak php
 =======
 
-*Oak* is an *unframework* in PHP. It's aimed at small, lightweight, do-it-yourself apps, completely avoiding the heavy weight of bloated frameworks. It builds up from the strengths of php, instead of over-engineering and using automagical smoke and mirrors.
+_Oak_ is an _unframework_ in PHP. It's aimed at small, lightweight, do-it-yourself apps, completely avoiding the heavy weight of bloated frameworks. It builds up from the strengths of php, instead of over-engineering and using automagical smoke and mirrors.
 
 What it implements:
- - Path routing.
- - Standardized class autoloading.
+ * Path routing.
+ * Standardized class autoloading.
 
 	
 Principles:
- - Ultra-explicit configuration, no magic.
- - Ultra-thin layer over plain php, no wizardry.
- - Ultra-loose coupling, no convoluted architecture.
+ * Ultra-explicit configuration, no magic.
+ * Ultra-thin layer over plain php, no wizardry.
+ * Ultra-loose coupling, no convoluted architecture.
 
 	
 Organization

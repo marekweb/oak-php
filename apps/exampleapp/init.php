@@ -13,7 +13,9 @@ $router = new \oak\Router(array(
 		/* POST paths are separate from GET, but work the exact same way:
 			'submitpath' => array('exampleapp\Controller', 'submithandler'),
 		*/
-	)
+	),
+	// This is a special handler called when no routes match.
+	'error' => array('exampleapp\Controller', 'error'),
 ));
 
 $invoker = new \oak\Invoker;

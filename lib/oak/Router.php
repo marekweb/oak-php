@@ -29,12 +29,12 @@ class Router {
 			foreach ($this->patterns[$requestMethod] as $pattern => $callback) {
 				
 				$pathParams = $this->match($pattern, $requestPathSegments);
-				if ($pathParams) {
+				if (!is_null($pathParams)) {
 					return array($callback, $pathParams);
 				}
 					// If it isn't a match, then no problem.
 					// It's only a problem if there are no matches at all.
-				continue;
+
 			}
 		}
 		// Nothing
@@ -59,18 +59,17 @@ class Router {
 	}
 
     public function match($pattern, $requestPathSegments) {
-		
 		$patternSegments = $this->getPatternSegments($pattern);
-
+		
         $params = array();
-        if (count($patternSegments) != count($requestPathSegments)) return FALSE;
+        if (count($patternSegments) != count($requestPathSegments)) return NULL;
 
         foreach ($patternSegments as $index => $segment) {
             if (!empty($segment) and $segment[0] == ':') {
                 $paramName = substr($segment, 1);
                 $params[$paramName] = $requestPathSegments[$index];
             } elseif ($segment != '*') {
-                if ($segment != $requestPathSegments[$index]) return FALSE;
+                if ($segment != $requestPathSegments[$index]) return NULL;
             }
         }
         return $params;

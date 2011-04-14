@@ -59,6 +59,9 @@ class Controller extends \oak\AbstractController {
 		return "<h1>Oak Example App</h1><h2>Greetings</h2><p>Hello world!</p>";
 	}
 	
+	public function error() {
+		return array("<h1>Oak Example App</h1><h2>Not found: " . $this->request->path ."</h2><p>You can route errors to a controller like any other request.", 404);
+	}
 	
 
 }

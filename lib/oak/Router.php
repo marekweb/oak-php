@@ -25,22 +25,26 @@ class Router {
 	
 		$requestPathSegments = $this->getRequestPathSegments($requestPath);
 		// Fail case: no request method routes defined
-		if (!array_key_exists($requestMethod, $this->patterns)) throw new Exception;
-		
-		foreach ($this->patterns[$requestMethod] as $pattern => $callback) {
-            try {
+		if (array_key_exists($requestMethod, $this->patterns)) {	
+			foreach ($this->patterns[$requestMethod] as $pattern => $callback) {
+				
 				$pathParams = $this->match($pattern, $requestPathSegments);
-                return array($callback, $pathParams);
-            } catch (Exception $e) {
-				// If it isn't a match, then no problem.
-				// It's only a problem if there are no matches at all.
-                continue;
-            }
-        }
+				if ($pathParams) {
+					return array($callback, $pathParams);
+				}
+					// If it isn't a match, then no problem.
+					// It's only a problem if there are no matches at all.
+				continue;
+			}
+		}
 		// Nothing
-		throw new Exception();
 		
+		if (array_key_exists('error', $this->patterns)) {
+			return array($this->patterns['error'], array());
+		}
+		return FALSE;
     }
+	
 	
 	public function getRequestPathSegments($requestPath) {
 		list($requestPath) = explode('?', $requestPath, 2);
@@ -59,14 +63,14 @@ class Router {
 		$patternSegments = $this->getPatternSegments($pattern);
 
         $params = array();
-        if (count($patternSegments) != count($requestPathSegments)) throw new Exception;
+        if (count($patternSegments) != count($requestPathSegments)) return FALSE;
 
         foreach ($patternSegments as $index => $segment) {
             if (!empty($segment) and $segment[0] == ':') {
                 $paramName = substr($segment, 1);
                 $params[$paramName] = $requestPathSegments[$index];
             } elseif ($segment != '*') {
-                if ($segment != $requestPathSegments[$index]) throw new Exception;
+                if ($segment != $requestPathSegments[$index]) return FALSE;
             }
         }
         return $params;

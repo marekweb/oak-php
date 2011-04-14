@@ -7,19 +7,20 @@ class Dispatcher {
 		private $router;
 		private $invoker;
 
-    public function __construct($router, $invoker, $notFoundCallback) {
+    public function __construct($router, $invoker) {
         $this->router = $router;
 		$this->invoker = $invoker;
-		$this->notFoundCallback = $notFoundCallback; // This is bad, can we use the router instead?
-    }
+		    }
 
     public function dispatch($requestPath, $requestMethod = 'GET', $requestParams = array()) {
 		
-		try {
-			list($callback, $pathParams) = $this->router->resolve($requestMethod, $requestPath);
-		} catch (Exception $e) {
-			list($callback, $pathParams) = array($this->notFoundCallback, array());
+		$route = $this->router->resolve($requestMethod, $requestPath);
+		if (!$route) {
+			// This happens when the router doesn't have an error page to route to. Now that's harsh.
+			$this->response('<pre>404 Not Found. Harsh error.</pre>', 404);
 		}
+		list($callback, $pathParams) = $route;
+		
 		
         $params = array_merge($pathParams, $requestParams);
 

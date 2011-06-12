@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set ('UTC');
-require '../../../init.php';
+require '../../init.php';
 
 $router = new \oak\Router(array(
 	'GET' => array(

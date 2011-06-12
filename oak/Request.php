@@ -11,12 +11,14 @@ class Request {
 	public $params;
 	public $path;
 	public $dispatcher;
+        public $cookie;
 
-	public function __construct($requestMethod, $params, $path, $dispatcher) {
+	public function __construct($requestMethod, $params, $path, $dispatcher, $cookie) {
 		$this->method = $requestMethod;
 		$this->params = $params;
 		$this->path = $path;
 		$this->dispatcher = $dispatcher;
+                $this->cookie = $cookie;
 	}
 
 }

@@ -10,7 +10,7 @@ class Dispatcher {
     public function __construct($router, $invoker) {
         $this->router = $router;
 		$this->invoker = $invoker;
-		    }
+	}
 
     public function dispatch($requestPath, $requestMethod = 'GET', $requestParams = array()) {
 		
@@ -24,7 +24,7 @@ class Dispatcher {
 		
         $params = array_merge($pathParams, $requestParams);
 
-        $request = new Request($requestMethod, $params, $requestPath, $this);
+        $request = new Request($requestMethod, $params, $requestPath, $this, $_COOKIE);
 
 		// Invocation of the controller: this is where the application handles the request.
 		$response = $this->invoker->invoke($callback, $request);

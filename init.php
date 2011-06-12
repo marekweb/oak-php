@@ -9,7 +9,7 @@
  
 ini_set('display_errors', 1); 
 error_reporting(E_ALL | E_NOTICE | E_STRICT);
-ini_set('html_errors', true);
+ini_set('html_errors', 0);
 
 /**
  * Handler that converts errors into exceptions.

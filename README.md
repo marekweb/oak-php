@@ -1,45 +1,53 @@
-Oak php
+Oak PHP
 =======
 
-_Oak_ is an unframework in PHP. It's aimed at small, lightweight, do-it-yourself apps. It avoids the heavy weight of bloated enterprise frameworks, and takes advantage of the strengths of PHP instead of over-engineering and obscuring its inner workings.
+Oak is a foundation framework in PHP. It's aimed at small, lightweight apps, and provides a basic foundation which can be used for MVC or any other type of configuration.
 
+Oak solves several problems by using accepted best practices in PHP 5.3:
+
+ * Class and file structure. Classes are namespaced and stored in a namespace directory tree.
+ * Routing URL requests. All requests are routed through a single PHP file.
+ * Dispatching to handlers. Requests are dispatched to handlers (class and method name callbacks) based on matches in a routing table.
+ 
 Principles:
 
- * Ultra-explicit configuration; no magic.
- * Ultra-thin layer over plain php; no wizardry.
- * Ultra-loose coupling; no convoluted architecture or dependecies.
+ * Explicit configuration; no magic.
+ * Thin layer over plain php; no obscured inner workings.
+ * Loose coupling; no convoluted architecture or dependecies.
 
 	
-Organization
----------
+Class and file structure
+------------------------
 
-PHP organization is a solved problem: the PSR-0 standard. lasses and namespace structure is reflected in the file system. A class called `myapp\validators\DataValidator` is expected in `myapp/validators/DataValidator.php`. Autoloading is done with a simple class loader.
+The PSR-0 standard describes the preferred file structure for PHP applications. The directory tree mirrors namespaces, and files are named after classes. A class called `\foo\bar\MyClass` is expected to be found in `foo/bar/MyClass.php`. Oak's PSR-0 compliant autoloader makes class loading transparent.
 
-The oak directory is used as the root of the class layout, and oak's own classes are placed in the oak namespace. Multiple apps can coexist in the same directory structure by using separate namespaces.
+The Oak root directory is used as the root of the namespace layout, and Oak's own classes are located in the `oak` namespace. Multiple apps can coexist in the same directory structure by using separate namespaces.
 
-Namespaces are used to separate apps from one another. An additional directory is used within the namespace for public files (where the web server document root should point) and another is used for private resources. These live alongside sub-namespaces but don't contain any PHP classes.
+Additionally, a `public` directory located in the app's namespace directory contains the necessary `.htaccess` and `app.php` files. The web server must be configured to point to this directory. The `app.php` file contains the configuration specific to the app, and loads the `init.php` file in the Oak root which contains the global Oak configuration.
 
 Decoupling
 ----------
 
-Oak only contains a few classes at its core, and they're decoupled using simple dependency injection. Whenever a class needs another class' functionality, it accepts an instance object as a constructor paramter. There are no hardcoded dependencies. Follow this convention for the rest of your app and you're all set.
+Oak only contains a few classes at its core, and they're decoupled using simple dependency injection. Any class which depends on another will, by convention, accept an instance of the other class as a constructor paramter. As a result there are no hardcoded dependencies, and you can swap out any Oak class for your own.
 
-Keeping things minimal, the Oak classes don't use interface classes. Adding interfaces would make things more formal and strict, but it's not really worth it to create a whole set of interface classes for such a small framework. 
+Because of the namespaced structure, it's possible to drop in classes and add new functionality while keeping with the PSR-0 best practices.
 
-Explicit configuration
-----------------------
+Routing requests and configuration files
+----------------------------------------
 
-A straightforward mod_rewrite directive routes all requests to the `index.php` in an app's public directory. This file is yours to edit and modify. This file includes the global `init.php` file located in the root directory. All object instantiations and configuration settings are done right there; nothing is hidden behind the scenes. Modify it as much as you like -- you can grab the default if you need to revert anything.
+In an app's `public` directory, a `.htaccess` file routes all requests to the app's `app.php` file. This `app.php` file is yours to edit and modify. This file includes the `init.php` file located in the root Oak directory. All object instantiations and configuration settings are done right there, either in `app.php` or in `init.php`; nothing is hidden behind the scenes.
 
-Simple control flow
--------------------
+Dispatching requests to handlers
+--------------------------------
 
-At the end of the app's init file, the dispatcher is called and it routes the request to the appropriate controller method. The Dispatcher class uses two servant classes to do this: the Router, which selects a controller based on the request path, and the Invoker, which instantiates the controller class and calls the handler method. These can easily be replaced with your own classes.
+After the configuration section in the `app.php` file, the Dispatcher is called and it routes the request to the appropriate handler method. The Dispatcher class uses two servant classes to do this: the Router, which accepts a URL and returns a matched callback name (class and method), and the Invoker, which receives a callback name and instantiates the class, before calling the specified method.
+
+By convention a class which contains handler methods is called a Controller, and it must accept a Request object as its sole constructor parameter. The Request object contains all of the data contained in the HTTP request.
 
 Getting started
 ---------------
 
-Download Oak and see the included example app. It has explanations in the comments. There's also a blank app that contains the default minimal init files and the htaccess.
+Download Oak and see the included example app. It has explanations in the comments. There's also a blank app that contains the default minimal `init.php` and `.htaccess` files. The blank app is less than 1 kB, while the entire `oak` namespace is about 10 kB.
 
 License and authors
 -------------------
@@ -47,4 +55,3 @@ License and authors
 Copyright (c) 2011 Marek Z.
 
 Released under the MIT License. See MIT-LICENSE.txt.
-

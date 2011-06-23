@@ -4,7 +4,7 @@ require '../../init.php';
 
 $router = new \oak\Router(array(
 	'GET' => array(
-
+		
 	),
 
 	'POST' => array(

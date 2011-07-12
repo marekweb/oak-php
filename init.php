@@ -39,23 +39,19 @@ define('APP_RES_PATH', realpath(APP_PATH . '/resources') . '/');
 
 /**
  * Library autoloading
- * The ClassLoader resides in the library just like the other classes.
- * It takes an array of paths, which are used for lookups in that order.
- * ClassLoader looks in each path for desired classes, and stops the search once it is found.
- * If classes are present in multiple paths, then the earlier paths will take precedence.
- * The ClassLoader uses the path format; <classpath>.php where the classpath case is as-is.
+ *
+ * The ClassLoader uses the path format: <classpath>.php.
  * In other words case sensitivity of the file system will make a difference here.
- * The convention in the Oak library has been to use lowercase namespaces and camelcase classes.
+ * The convention in the Oak library is to use lowercase namespaces and camelcase classes.
  */
 include OAK_PATH . 'oak/ClassLoader.php';
 
-$classLoader = new \oak\ClassLoader(array(OAK_PATH));
+$classLoader = new \oak\ClassLoader(OAK_PATH);
 
-
-$classLoader->register(); 
-// It's not a brilliant idea to use methods that have side-effects.
-// In this case the register() method has the side effect of registering itself in the autoloader.
-// It's a tradeoff between prettiness and explicitness.
-// The following is the equivalent call:
+// Registering the autoloader can be done with the following call:
 //spl_autoload_register(array($classLoader, 'loadClass'));
+// Or, as a shortcut, the loader can do this by itself:
+$classLoader->register(); 
 
+// End of init.php
+// At this point the app.php file which included this file will resume, where app-specific settings will be applied.

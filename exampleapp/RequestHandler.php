@@ -10,7 +10,7 @@ namespace exampleapp;
  * All the constructor does is assign the request object to $this->request
  * and call the init method.
  */
-class Controller extends \oak\AbstractController {
+class RequestHandler extends \oak\BaseHandler {
 
 	public function init() {
 	
@@ -46,7 +46,7 @@ class Controller extends \oak\AbstractController {
 		
 		
 		
-		return "<h1>Oak Example App</h1><h2>Greetings</h2><p>Hello, {$name}.</p><p>The router path for this handler is 'greetings/:name'. Try changing the name in the path.</p>";
+		return "<h1>Oak Example App</h1><h2>Greetings</h2><p>Hello, {$name}.</p><p>The router path for this handler is <code>greetings/:name</code>. Try changing the name in the path.</p>";
 	
 	}
 	

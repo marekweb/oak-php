@@ -4,9 +4,9 @@ require '../../init.php';
 
 $router = new \oak\Router(array(
 	'GET' => array(
-		'greetings/:name' => array('exampleapp\Controller', 'greetings'),
-		'greetings' => array('exampleapp\Controller', 'greetingsblank'),
-		'' => array('exampleapp\Controller', 'index'),
+		'greetings/:name' => array('exampleapp\RequestHandler', 'greetings'),
+		'greetings' => array('exampleapp\RequestHandler', 'greetingsblank'),
+		'' => array('exampleapp\RequestHandler', 'index'),
 	),
 
 	'POST' => array(
@@ -15,11 +15,11 @@ $router = new \oak\Router(array(
 		*/
 	),
 	// This is a special handler called when no routes match.
-	'error' => array('exampleapp\Controller', 'error'),
+	'error' => array('exampleapp\RequestHandler', 'error'),
 ));
 
 $invoker = new \oak\Invoker;
 
-$dispatcher = new \oak\Dispatcher($router, $invoker, array('exampleweb\Controller', 'pageNotFound'));
+$dispatcher = new \oak\Dispatcher($router, $invoker, array('exampleweb\RequestHandler', 'pageNotFound'));
 
 $dispatcher->dispatchFromEnvironment();

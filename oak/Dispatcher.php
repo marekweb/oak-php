@@ -20,23 +20,21 @@ class Dispatcher {
 
 		$route = $this->router->resolve($requestMethod, $requestPath);
 		if (!$route) {
-			// This happens when the router doesn't have an error page to route to. Now that's harsh.
-			$this->response('<pre>404 Not Found. Harsh error.</pre>', 404);
+			// This happens when the router doesn't have an error page to route to. 
+			$this->response('<pre>404 Not Found.</pre>', 404);
 		}
 		list($callback, $pathParams) = $route;
-
 
 		$params = array_merge($pathParams, $requestParams);
 
 		$request = new Request($requestMethod, $params, $requestPath, $this, $_COOKIE);
 
-		// Invocation of the controller: this is where the application handles the request.
+		// Invocation of the handler: this is where the application handles the request.
 		$response = $this->invoker->invoke($callback, $request);
 		$defaults = array('', 200, array());
 		$response = (array) $response + $defaults;
 		list($body, $status, $headers) = $response;
 		$this->response($body, $status, $headers);
-
 	}
 
 
@@ -81,22 +79,11 @@ class Dispatcher {
 				$headerString = $key . ': ' . $headerItem;
 			}
 
-
-			header($headerString, false); // Second argument false makes
-			// header() emit headers even if the header name is a duplicate of a
-			// previously sent header. Setting it to true will overwrite.
+			header($headerString, false); // Second argument prevents header overwrite
 		}
 
 		// This is the only print statement; the entire body is emitted at once.
 		print $body;
-
-		// Flush the output buffer.
-		flush(); // This might not really make any difference, since we exit.
-
-		// Nothing afterwards will execute, this may be an unexpected behavior
-		// if you put something after the dispatch call in the bootstrap script.
-		// The purpose is to allow an app to override an otherwise response.
-		// So the request has to be completed
 		exit;
 		// Note that shutdown functions will still run, followed by
 		// object destructors

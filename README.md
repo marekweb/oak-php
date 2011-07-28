@@ -21,9 +21,7 @@ Class and file structure
 
 The PSR-0 standard describes the preferred file structure for PHP applications. The directory tree mirrors namespaces, and files are named after classes. A class called `\foo\bar\MyClass` is expected to be found in `foo/bar/MyClass.php`. Oak's PSR-0 compliant autoloader makes class loading transparent.
 
-The Oak root directory is used as the root of the namespace layout, and Oak's own classes are located in the `oak` namespace. Multiple apps can coexist in the same directory structure by using separate namespaces.
-
-Additionally, a `public` directory located in the app's namespace directory contains the necessary `.htaccess` and `app.php` files. The web server must be configured to point to this directory. The `app.php` file contains the configuration specific to the app, and loads the `init.php` file in the Oak root which contains the global Oak configuration.
+Multiple apps can coexist in the same directory structure by using separate namespaces. This follows from the assumption that each app should have its own namespace. Oak's own classes are located in the `oak` namespace.
 
 Decoupling
 ----------
@@ -36,6 +34,14 @@ Routing requests and configuration files
 ----------------------------------------
 
 In an app's `public` directory, a `.htaccess` file routes all requests to the app's `app.php` file. This `app.php` file is yours to edit and modify. This file includes the `init.php` file located in the root Oak directory. All object instantiations and configuration settings are done right there, either in `app.php` or in `init.php`; nothing is hidden behind the scenes.
+
+Public files
+------------
+
+By convention, an app's namespace directory also contains a `public` directory. This is where the necessary `.htaccess` and `app.php` files are found, and it's where your webserver points to as the document root.
+
+The `app.php` file contains the configuration specific to the app. It loads the `init.php` file in the Oak root which contains the global Oak configuration.
+
 
 Dispatching requests to handlers
 --------------------------------

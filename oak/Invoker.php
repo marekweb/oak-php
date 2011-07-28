@@ -1,37 +1,33 @@
 <?php
 
 namespace oak;
-
-class CannotInvokeException extends \Exception {}
 /**
- * Invoker responsible for instantiating a controller and calling the requested method.
- * The invoker has one interface method: invoke($callback, $controllerConstructorArgument);
- * It's up to the implementation how it wants to instantiate the object, and how it wants to call it.
- * callback is a 2-tuple: ($className, $methodName).
- * TODO $controllerConstructorArgument could be an array instead: then we instantiate it with variable arguments.
+ * Handler invoker. Responsible for invoking a callback by 
+ * instantiating a handler and calling the requested method.
+ *
+ * The invoker interface has one method:
+ *   invoke($handlerCallback, $handlerConstructorArgument);
+ *
+ * A callback takes the form of an array with two members: array($className, $methodName).
+ * The invoke method instantiates the given class (with the given constructor argument)
+ * and calls the given method.
  */
 class Invoker {
 
 	public function __construct() {
 	}
 
-	public function invoke($callback, $controllerConstructorArgument) {
+	public function invoke($handlerCallback, $handlerConstructorArgument) {
 
-		// Type check: this is one of the instances where we're more careful than usual
-		// It's debatable whether this is worth doing, since it adds overhead that a correct app doesn't need.
-		if (!is_array($callback) || count($callback) != 2) throw new Exception('Controller callback must be a 2-tuple (classname, method).');
-
-		list($controllerClass, $controllerMethod) = $callback;
+		list($handlerClass, $handlerMethod) = $handlerCallback;
 
 		// This check is done here rather than with an is_callable() using the instance, because it's better to be able
 		// to abort before the instance is created.
-		if (!method_exists($controllerClass, $controllerMethod)) throw new Exception("Controller class method not found: '$controllerClass::$controllerMethod'.");
+		if (!method_exists($handlerClass, $handlerMethod)) throw new Exception("Handler class method not found: '$handlerClass::$handlerMethod'.");
 
-		if (!class_exists($controllerClass)) throw new Exception("Controller callback class not found: '$controllerClass'.");
+		$handlerInstance = new $handlerClass($handlerConstructorArgument);
 
-		$controllerInstance = new $controllerClass($controllerConstructorArgument);
-
-		$returnValue = call_user_func(array($controllerInstance, $controllerMethod));
+		$returnValue = call_user_func(array($handlerInstance, $handlerMethod));
 
 		return $returnValue;
 	}

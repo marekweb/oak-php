@@ -9,6 +9,8 @@ Oak solves several problems by using accepted best practices in PHP 5.3:
  * Routing URL requests. All requests are routed through a single PHP file.
  * Dispatching to handlers. Requests are dispatched to handlers (class and method name callbacks) based on matches in a routing table.
  
+It does its job in only about 10kB of MIT-licensed source code.
+ 
 Principles:
 
  * Explicit configuration; no magic.

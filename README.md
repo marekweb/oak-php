@@ -1,7 +1,7 @@
 Oak PHP
 =======
 
-Oak is a foundation framework in PHP. It's aimed at small, lightweight apps, and provides a basic foundation which can be used for MVC or any other type of configuration.
+Oak is a microframework in PHP. It's aimed at small, lightweight apps, and provides a basic foundation which can be used for MVC or any other type of configuration.
 
 Oak solves several problems by using accepted best practices in PHP 5.3:
 
@@ -50,7 +50,8 @@ Dispatching requests to handlers
 
 After the configuration section in the `app.php` file, the Dispatcher is called and it routes the request to the appropriate handler method. The Dispatcher class uses two servant classes to do this: the Router, which accepts a URL and returns a matched callback name (class and method), and the Invoker, which receives a callback name and instantiates the class, before calling the specified method.
 
-By convention a class which contains handler methods is called a Controller, and it must accept a Request object as its sole constructor parameter. The Request object contains all of the data contained in the HTTP request.
+A handler is a method which accepts a Context object as its single parameter. A Context is a simple container
+class which can be replaced with app-specific functionality.
 
 Getting started
 ---------------

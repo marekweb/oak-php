@@ -25,10 +25,19 @@ class Router {
 			}
 		}
 
-		if (array_key_exists('error', $this->patterns)) {
-			return array($this->patterns['error'], array());
+		if (array_key_exists('default', $this->patterns)) {
+			return array($this->patterns['default'], array());
 		}
 		return FALSE;
+	}
+	
+	
+	public function getExceptionHandler() {
+		if (array_key_exists('exception', $this->patterns)) {
+			return $this->patterns['exception'];
+		} else {
+			return null;
+		}
 	}
 
 

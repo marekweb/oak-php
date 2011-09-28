@@ -6,7 +6,7 @@ namespace oak;
  * instantiating a handler and calling the requested method.
  *
  * The invoker interface has one method:
- *   invoke($handlerCallback, $handlerConstructorArgument);
+ *   invoke($handlerCallback, $handlerArgument);
  *
  * A callback takes the form of an array with two members: array($className, $methodName).
  * The invoke method instantiates the given class (with the given constructor argument)
@@ -17,7 +17,7 @@ class Invoker {
 	public function __construct() {
 	}
 
-	public function invoke($handlerCallback, $handlerConstructorArgument) {
+	public function invoke($handlerCallback, $handlerArgument) {
 
 		list($handlerClass, $handlerMethod) = $handlerCallback;
 
@@ -25,9 +25,9 @@ class Invoker {
 		// to abort before the instance is created.
 		if (!method_exists($handlerClass, $handlerMethod)) throw new Exception("Handler class method not found: '$handlerClass::$handlerMethod'.");
 
-		$handlerInstance = new $handlerClass($handlerConstructorArgument);
+		$handlerInstance = new $handlerClass();
 
-		$returnValue = call_user_func(array($handlerInstance, $handlerMethod));
+		$returnValue = call_user_func(array($handlerInstance, $handlerMethod), $handlerArgument);
 
 		return $returnValue;
 	}

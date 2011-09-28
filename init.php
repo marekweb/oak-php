@@ -15,7 +15,8 @@ ini_set('html_errors', 0);
  * Handler that converts errors into exceptions.
  * There is an issue when some code uses the '@' error suppressor. It doesn't actually suppress the error.
  * Rather, it sets the error level to a different level just for that expression.
- * this version of the handler doesn't take into account that problem. The bright side is that error supression is a mistake to begin with.
+ * this version of the handler doesn't take into account that problem.
+ * Error supression is a mistake to begin with.
  */
 set_error_handler(function ($errno, $errstr, $errfile, $errline ) {
     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);

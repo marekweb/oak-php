@@ -6,61 +6,53 @@
 namespace exampleapp;
 
 /*
- * Inheriting from AbstractController takes care of the constructor.
- * All the constructor does is assign the request object to $this->request
- * and call the init method.
+ * The RequestHandler is a class we've created to contain handler methods -- the class doesn't have any
+ * responsiblity beyond that of just containing these methods.
  */
-class RequestHandler extends \oak\BaseHandler {
-
-	public function init() {
+class RequestHandler {
 	
-		/*
-		 * Here you can set up the resources you need, load config files, open database connections.
-		 * Instantiate classes here as members for the handler methods to use.
-		 * Create different controller classes for handlers that need different resources, if you want.
-		 * There's no magical relationship between controller classes and paths; it's all
-		 * up to how you configure the router.
-		 */
-		 
-	}
-	
-	public function index() {
+	public function index($context) {
 	
 		/*
 		 * This handler gets called for the index path, because that's how this app's router is configured.
-		 * You can change the router settings in the app's index.php file.
+		 * You can change the router settings in the app's app.php file.
 		 */
 	
 		return "<h1>Oak Example App</h2><h2>Index</h2><p>This example shows you a minimal app. You can go anywhere from here.</p><p><a href=\"/greetings/friend\">Greetings page.</a></p>";
 	}
 
-	public function greetings() {
+	public function greetings($context) {
 	
 		/*
 		 * Whether it's a GET or a POST request, the parameter array is located at
-		 * $this->request->params. It's a plain array; if you want more functionality
-		 * such as default values or validation, you can bring in a wrapper class.
+		 * $context->params. It's a plain array; if you want more functionality
+		 * such as default values or validation, you can use a wrapper class.
 		 */
 		
-		$name = htmlentities($this->request->params['name']);
-		
-		
+		$name = htmlentities($context->params['name']);
 		
 		return "<h1>Oak Example App</h1><h2>Greetings</h2><p>Hello, {$name}.</p><p>The router path for this handler is <code>greetings/:name</code>. Try changing the name in the path.</p>";
 	
 	}
 	
-	public function greetingsblank() {
+	public function greetingsblank($context) {
+	
 		/*
 		 * We added an additional handler for the 'greeting/' path without any parameter following it.
 		 */
 		
-		$this->request->params['name'] = 'friend';
 		return "<h1>Oak Example App</h1><h2>Greetings</h2><p>Hello world!</p>";
 	}
 	
-	public function error() {
-		return array("<h1>Oak Example App</h1><h2>Not found: " . $this->request->path ."</h2><p>You can route errors to a controller like any other request.", 404);
+	public function throwexception($context) {
+		throw new \oak\Exception("WHat!");
+	}
+	public function pageNotFound($context) {
+		return array("<h1>Oak Example App</h1><h2>Not found: " . $context->path ."</h2><p>You can route errors to a controller like any other request.", 404);
+	}
+	public function error($context) {
+		return "If you are reading this, then something is very, very wrong.";
+
 	}
 	
 

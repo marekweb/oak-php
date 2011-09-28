@@ -3,13 +3,14 @@
 namespace oak;
 
 class Dispatcher {
-		/* interface Router { resolve($requestMethod, $requestPath); } */
-		private $router;
-		private $invoker;
+	/* interface Router { resolve($requestMethod, $requestPath); } */
+	private $router;
+	private $invoker;
 
-	public function __construct($router, $invoker) {
+	public function __construct($router, $invoker, $contextClass = 'oak\Context') {
 		$this->router = $router;
 		$this->invoker = $invoker;
+		$this->contextClass = $contextClass;
 	}
 
 	/**
@@ -27,16 +28,31 @@ class Dispatcher {
 
 		$params = array_merge($pathParams, $requestParams);
 
-		$request = new Request($requestMethod, $params, $requestPath, $this, $_COOKIE);
+		$request = new $this->contextClass($requestMethod, $requestPath, $params, $this);
 
 		// Invocation of the handler: this is where the application handles the request.
-		$response = $this->invoker->invoke($callback, $request);
+		try {
+			$response = $this->invoker->invoke($callback, $request);
+		//} catch (Exception $e) {
+		//	$response = $this->fallbackExceptionHandler($request, $e);
+		
+		} catch (\Exception $e) {
+			$callback = $this->router->getExceptionHandler();
+			if (!is_null($callback)) {
+				$response = $this->invoker->invoke($callback, $request);
+			} else {
+				$response = $this->fallbackExceptionHandler($request, $e);
+			}
+		}
 		$defaults = array('', 200, array());
 		$response = (array) $response + $defaults;
 		list($body, $status, $headers) = $response;
 		$this->response($body, $status, $headers);
 	}
 
+	public function fallbackExceptionHandler($request, $e) {
+		return sprintf("<pre>An error occurred\n\n%s %s:%d\n%s\n%s</pre>", get_class($e), $e->getFile(), $e->getLine(), $e->getMessage(), $e->getTraceAsString());
+	}
 
 	/**
 	 * Send a HTTP response with the given body, status and headers, and
